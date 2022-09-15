@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Logger } from 'src/app/core/helpers/logger';
 import { UserService } from '../../services/user.service';
 
@@ -11,10 +12,12 @@ import { UserService } from '../../services/user.service';
 export class UserSigninComponent implements OnInit {
 
   public signinForm!: FormGroup;
+  public hasError: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -32,11 +35,16 @@ export class UserSigninComponent implements OnInit {
 
   public onSubmit(): void {
     this.userService.signin(this.signinForm.value); // Trigger the signin process
-    
+
     if (this.userService.isAuthenticated()) {
-      Logger.info(`Got a user!`)
+      this.router.navigate(['/', 'interns']);
     } else {
-      Logger.info('Bad credentials');
+      this.signinForm.reset();
+      this.hasError = true;
     }
+  }
+
+  public close(): void {
+    this.hasError = false;
   }
 }
