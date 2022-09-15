@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 import { InternModule } from './intern/intern.module';
 import { POEModule } from './poe/poe.module';
+import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { POEModule } from './poe/poe.module';
     BrowserAnimationsModule,
     SharedModule,
     InternModule,
-    POEModule
+    POEModule,
+    UserModule
   ],
   providers: [],
   bootstrap: [AppComponent]
