@@ -6,6 +6,7 @@ import { InternTableComponent } from './intern/components/intern-table/intern-ta
 import { POEAddComponent } from './poe/components/poe-add/poe-add.component';
 import { POEDetailComponent } from './poe/components/poe-detail/poe-detail.component';
 import { POETableComponent } from './poe/components/poe-table/poe-table.component';
+import { UserSigninComponent } from './user/components/user-signin/user-signin.component';
 
 @NgModule({
   imports: [RouterModule.forRoot(AppRoutingModule.routes)],
@@ -15,7 +16,7 @@ export class AppRoutingModule {
   public static routes: Routes = [
     {
       path: '',
-      redirectTo: 'interns',
+      redirectTo: 'signin',
       pathMatch: 'full'
     },
     {
@@ -43,6 +44,10 @@ export class AppRoutingModule {
       component: POEAddComponent,
     },
     {
+      path: 'signin',
+      component: UserSigninComponent
+    },
+    { // Fallback route Route if pattern was not found
       path: '**',
       redirectTo: 'interns',
       pathMatch: 'full'
