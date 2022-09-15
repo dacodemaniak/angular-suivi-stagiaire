@@ -28,27 +28,6 @@ export class UserService {
    */
   public signin(credentials: any): void {
     Logger.info(JSON.stringify(credentials));
-    // Yassine : approche 1 boucle et comparaison
-    for (const inUser of this.users) {
-      if (inUser.login === credentials.login && inUser.pass === credentials.pass) {
-        this.user = new UserModel();
-        this.user.setLogin(credentials.login);
-        this.user.setToken('Le Token qui sera renvoyé par le backend'); // fmjdkfjmqdskfjmqdskhmjqsei.dmqklsfdjqsmklnesmkjm.qmskjfmkned98956d
-        break;
-      }
-    }
-    // Soit this.user est une instance de UserModel soit il est null
-
-    // Approche old school
-    for (let i: number = 0; i < this.users.length; i++) {
-      const inUser: any = this.users[i];
-      if (inUser.login === credentials.login && inUser.pass === credentials.pass) {
-        this.user = new UserModel();
-        this.user.setLogin(credentials.login);
-        this.user.setToken('balamkjdfmqsk.xxxxxx.yyyyyyy');
-      }
-    }
-
     // Approche JL : find
     const foundUser: any = this.users.find(
       (inUser: any) => inUser.login === credentials.login && inUser.pass === credentials.pass
