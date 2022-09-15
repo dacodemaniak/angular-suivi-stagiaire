@@ -17,12 +17,12 @@ export class CrudSnackbarService {
   }
 
 
-  config(message: string, action?: string) {
+  public config(message: string, action?: string) {
     this.message = message;
     this.action = action;
   }
 
-  open(): void {
+  public open(): void {
     this.snackBar.open(
       this.message,
       this.action,
