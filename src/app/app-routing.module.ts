@@ -8,6 +8,7 @@ import { POEDetailComponent } from './poe/components/poe-detail/poe-detail.compo
 import { POETableComponent } from './poe/components/poe-table/poe-table.component';
 import { UserSigninComponent } from './user/components/user-signin/user-signin.component';
 import { HasUserGuard } from './user/guards/has-user.guard';
+import { NoUserGuard } from './user/guards/no-user.guard';
 
 @NgModule({
   imports: [RouterModule.forRoot(AppRoutingModule.routes)],
@@ -22,27 +23,45 @@ export class AppRoutingModule {
     },
     {
       path: 'interns',
-      component: InternTableComponent
+      component: InternTableComponent,
+      canActivate: [ // Pattern COF (Chain Of Responsibilities)
+        NoUserGuard
+      ]
     },
     {
       path: 'intern/:id',
-      component: InternDetailComponent
+      component: InternDetailComponent,
+      canActivate: [
+        NoUserGuard
+      ]
     },
     {
       path: 'intern/manage/add',
       component: InternAddComponent,
+      canActivate: [
+        NoUserGuard
+      ]
     },
     {
       path: 'poecollections',
-      component: POETableComponent
+      component: POETableComponent,
+      canActivate: [
+        NoUserGuard
+      ]
     },
     {
       path: 'poedetail/:id',
-      component: POEDetailComponent
+      component: POEDetailComponent,
+      canActivate: [
+        NoUserGuard
+      ]
     },
     {
       path: 'poe/manage/add',
       component: POEAddComponent,
+      canActivate: [
+        NoUserGuard
+      ]
     },
     {
       path: 'signin',
