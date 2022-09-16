@@ -66,6 +66,20 @@ export class UserService {
    * @returns Yes or No a user was authenticated
    */
   public isAuthenticated(): boolean {
+    const userAsString: string | null = localStorage.getItem(this.STORAGE_KEY);
+    
+    if (userAsString !== null) {
+      // Y a bien qq chose dans localStorage à la clé auth-token
+      this.user = new UserModel(); // Je refais une instance d'un UserModel
+      
+      // Je parse la chaîne user pour récupérer un objet
+      const persistentUser: any = JSON.parse(userAsString); // Parse is the inverse of Stringify
+      
+      // Je finis de définir this.user
+      this.user.setLogin(persistentUser.login);
+      this.user.setToken(persistentUser.token);
+    }
+
     if (this.user === null) {
       return false;
     }
