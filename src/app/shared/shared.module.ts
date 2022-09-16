@@ -14,6 +14,7 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
+    CommonModule,
     UiModule,
     ReactiveFormsModule,
     RouterModule
