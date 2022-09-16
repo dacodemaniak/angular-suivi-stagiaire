@@ -57,8 +57,6 @@ export class UserService {
     localStorage.removeItem(this.STORAGE_KEY);
 
     this.router.navigate(['/', 'signin']);
-
-
   }
 
   /**
@@ -66,6 +64,14 @@ export class UserService {
    * @returns Yes or No a user was authenticated
    */
   public isAuthenticated(): boolean {
+    if (this.user === null) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public getToken(): void {
     const userAsString: string | null = localStorage.getItem(this.STORAGE_KEY);
     
     if (userAsString !== null) {
@@ -79,11 +85,5 @@ export class UserService {
       this.user.setLogin(persistentUser.login);
       this.user.setToken(persistentUser.token);
     }
-
-    if (this.user === null) {
-      return false;
-    }
-
-    return true;
   }
 }
