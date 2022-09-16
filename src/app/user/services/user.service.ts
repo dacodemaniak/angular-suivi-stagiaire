@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Logger } from 'src/app/core/helpers/logger';
 import { UserModel } from '../models/user-model';
 
@@ -19,7 +20,14 @@ export class UserService {
 
   private user: UserModel | null = null;
 
-  constructor() { }
+  /**
+   * Class constant always uppercase
+   */
+  private readonly STORAGE_KEY: string = 'auth-token';
+
+  constructor(
+    private router: Router
+  ) { }
 
   /**
    * 
@@ -36,11 +44,21 @@ export class UserService {
       this.user = new UserModel();
       this.user.setLogin(credentials.login);
       this.user.setToken('yyyyyyy.xxxxxx.zzzzzz');
+
+      // Persist in Local or Session storage user that found
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.user));
     }
   }
 
   public signout(): void {
     this.user = null;
+
+    // Remove the key in Local or Session storage
+    localStorage.removeItem(this.STORAGE_KEY);
+
+    this.router.navigate(['/', 'signin']);
+
+
   }
 
   /**
