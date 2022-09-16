@@ -66,6 +66,10 @@ export class UserService {
    * @returns Yes or No a user was authenticated
    */
   public isAuthenticated(): boolean {
-    return this.user !== null;
+    if (this.user === null) {
+      return false;
+    }
+
+    return true;
   }
 }
