@@ -1,0 +1,16 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "login": "bond",
+            "pass": "007",
+            "token": "007.xxxxx.yyyyy"
+        },
+        {
+            "id": 2,
+            "login": "casper",
+            "pass": "ghost",
+            "token": "casper.xxxxx.yyyyy"
+        }
+    ]
+}
