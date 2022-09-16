@@ -36,6 +36,9 @@ export class UserSigninComponent implements OnInit {
   }
 
   public onSubmit(): void {
+    /**
+     * this.signinForm.value => {"login": "bond", "pass": "007"}
+     */
     this.userService.signin(this.signinForm.value); // Trigger the signin process
 
     if (this.userService.isAuthenticated()) {
