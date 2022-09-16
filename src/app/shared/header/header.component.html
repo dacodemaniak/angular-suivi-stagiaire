@@ -1,6 +1,13 @@
 <mat-toolbar color="primary">
   <span>{{ title }}</span>
   <span class="--spacer"></span>
-  <a [routerLink]="['/signin']">Signin</a>
+  <a [routerLink]="['/signin']" *ngIf="!userService.isAuthenticated()">
+    <mat-icon>person</mat-icon>
+  </a>
+  <a *ngIf="userService.isAuthenticated()" (click)="userService.signout()">
+    <mat-icon>
+      no_accounts
+    </mat-icon>
+  </a>
   <span>Interns # {{ internsNumber }}</span>
 </mat-toolbar>
