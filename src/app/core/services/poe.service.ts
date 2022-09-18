@@ -1,5 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of, take } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { Logger } from '../helpers/logger';
 import { ICrud } from '../interfaces/i-crud';
 import { POE } from '../models/poe';
 
@@ -9,7 +12,9 @@ import { POE } from '../models/poe';
 export class POEService implements ICrud<POE>{
 
 
-  constructor() {}
+  constructor(
+    private httpClient: HttpClient
+  ) {}
 
   add(item: POE): void {
 
@@ -23,7 +28,21 @@ export class POEService implements ICrud<POE>{
   }
 
   findAll(): Observable<POE[]> {
-    return of([]);
+    return this.httpClient.get<any>(
+      `${environment.apiRoot}poe`
+    )
+    .pipe(
+      take(1),
+      map((poes: any) => {
+        return poes.map((poe: any) => {
+          
+          const asClass: POE = new POE().deserialize(poe);
+
+          Logger.info(`Deserialized POE ${JSON.stringify(asClass)}`);
+          return asClass;
+        })
+      })
+    )
   }
 
   findOne(id: number): Observable<POE | null> {
