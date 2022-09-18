@@ -19,7 +19,7 @@ export class POEAddComponent implements OnInit {
 
   ngOnInit(): void {
     this.poeForm = this.formBuilder.group({
-      title: [
+      name: [
         '', // Default value for the field control
         [
           Validators.required,
@@ -35,7 +35,7 @@ export class POEAddComponent implements OnInit {
     // Next we'll have to create a new Intern Instance
     const poe: POE = new POE();
     poe.id = nextId;
-     poe.title = this.poeForm.value.title;
+     poe.name = this.poeForm.value.name;
 
     // We'll have to pass brand new intern to the add method of our service
     this.poeService.add(poe);

@@ -13,7 +13,7 @@
     <tr *ngFor="let poe of poes">
       <td>{{ poe.id }}</td>
       <td>
-        <a [routerLink]="['/', 'poedetail', poe.id]">{{ poe.title | uppercase }}</a>
+        <a [routerLink]="['/', 'poedetail', poe.id]">{{ poe.name | uppercase }}</a>
       </td>
       <td><span (click)="poeService.delete(poe)">x</span></td>
     </tr>
