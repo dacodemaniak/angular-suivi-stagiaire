@@ -48,7 +48,6 @@ export class UserService {
       take(1)
     )
     .subscribe((anyUsers: any) => {
-      Logger.info(JSON.stringify(anyUsers));
       if (anyUsers.length) {
         // Got a user...
         this.user = new UserModel();
