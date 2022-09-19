@@ -46,14 +46,7 @@ export class InternService implements ICrud<Intern> {
     .pipe(
       take(1),
       map((rawIntern: any) => {
-        const intern: Intern = new Intern();
-        intern.id = rawIntern.id;
-        intern.name = rawIntern.name;
-        intern.firstname = rawIntern.firstName;
-        intern.address = rawIntern.address;
-        intern.email = rawIntern.email;
-        intern.phoneNumber = rawIntern.phoneNumber;
-        intern.birthDate = new Date(rawIntern.birthDate);
+        const intern: Intern = new Intern().deserialize(rawIntern);
 
         return intern;
       })
@@ -67,7 +60,22 @@ export class InternService implements ICrud<Intern> {
 
   public delete(intern: Intern): void {}
 
-  public add(intern: Intern): void {}
+  /**
+   * 
+   * @param internData Combination of Intern and POEs typed unknown to avoid reassignation
+   */
+  public add(internData: unknown): Observable<Intern> {
+    return this.httpClient.post<any>(
+      `${environment.apiRoot}intern`,
+      internData
+    )
+    .pipe(
+      take(1),
+      map((rawIntern: unknown) => {
+        return new Intern().deserialize(rawIntern);
+      })
+    )
+  }
 
   public update(intern: Intern): void {}
 
