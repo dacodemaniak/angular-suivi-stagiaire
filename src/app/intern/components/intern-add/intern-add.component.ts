@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { Logger } from 'src/app/core/helpers/logger';
 import { POE } from 'src/app/core/models/poe';
-import { CrudSnackbarService } from 'src/app/core/services/crud-snackbar.service';
-import { InternService } from 'src/app/core/services/intern.service';
-import { POEService } from 'src/app/core/services/poe.service';
-import { DateLessThan } from 'src/app/core/validators/date-less-than';
+import { CrudSnackbarService } from '@services/crud-snackbar.service';
+import { InternService } from '@services/intern.service';
+import { POEService } from '@services/poe.service';
+import { DateLessThan } from './../../../core/validators/date-less-than';
 import { Intern } from './../../../core/models/intern';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-intern-add',
   templateUrl: './intern-add.component.html',
@@ -18,6 +19,7 @@ export class InternAddComponent implements OnInit {
 
   public internForm: FormGroup | null = null;
   public poes: POE[] = [];
+  private subscription!: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -80,26 +82,24 @@ export class InternAddComponent implements OnInit {
 
   }
 
+  /**
+   * Call service to add an Intern
+   * UPDATE : some DTO have to been sent to service combining Intern and POES of the Intern
+   */
   public onSubmit(): void {
     console.log(`Bout to send : ${JSON.stringify(this.internForm!.value)}`);
-    const nextId: number = this.internService.getNextId();
-
-    // Next we'll have to create a new Intern Instance
-    const intern: Intern = new Intern();
-    intern.id = nextId;
-    intern.name = this.internForm!.value.name;
 
     // We'll have to pass brand new intern to the add method of our service
-    this.internService.add(intern);
-
-    // Load a snack
-    this.crudSnackBar.config(`Intern was successfully added`, `Got It`);
-    this.crudSnackBar.open();
+    this.subscription = this.internService.add(this.internForm!.value)
+      .subscribe((intern: Intern) => {
+        Logger.info(`An intern was created : ${JSON.stringify(intern)}`);
+        // Load a snack
+        this.crudSnackBar.config(`Intern was successfully added`, `Got It`);
+        this.crudSnackBar.open();
     
-    // Finally go to the intern table component
-    this.router.navigate(['/', 'interns']);
-
-
+        // Finally go to the intern table component
+        this.router.navigate(['/', 'interns']);
+      });
   }
 
 }
