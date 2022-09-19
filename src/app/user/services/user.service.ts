@@ -3,7 +3,10 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { take } from 'rxjs';
 import { Logger } from 'src/app/core/helpers/logger';
+import { StorageStrategyFactory } from 'src/app/core/helpers/storage-strategy-factory';
 import { UserModel } from '../models/user-model';
+import { IStorage } from '../strategies/i-storage';
+import { LocalStrategy } from '../strategies/local-strategy';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +14,11 @@ import { UserModel } from '../models/user-model';
 export class UserService {
 
   private user: UserModel | null = null;
+  
+  /**
+   * Storage strategy to use to store in local or session Storage
+   */
+  private storage: IStorage = StorageStrategyFactory.getInstance();
 
   /**
    * Class constant always uppercase
@@ -21,6 +29,10 @@ export class UserService {
     private router: Router,
     private httpClient: HttpClient
   ) { }
+
+  public setStorageStrategy(strategy: IStorage): void {
+    this.storage = strategy;
+  }
 
   /**
    * 
@@ -43,18 +55,16 @@ export class UserService {
         this.user.setLogin(anyUsers[0].login);
         this.user.setToken(anyUsers[0].token);
 
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.user));
+        this.storage.store(this.STORAGE_KEY, JSON.stringify(this.user));
       }
     });
-
-    Logger.info(`Continue to do what you want...`);
   }
 
   public signout(): void {
     this.user = null;
 
     // Remove the key in Local or Session storage
-    localStorage.removeItem(this.STORAGE_KEY);
+    this.storage.remove(this.STORAGE_KEY);
 
     this.router.navigate(['/', 'signin']);
   }
