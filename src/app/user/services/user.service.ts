@@ -82,7 +82,7 @@ export class UserService {
   }
 
   public getToken(): void {
-    const userAsString: string | null = localStorage.getItem(this.STORAGE_KEY);
+    const userAsString: string | null = this.storage.get(this.STORAGE_KEY);
     
     if (userAsString !== null) {
       // Y a bien qq chose dans localStorage à la clé auth-token
