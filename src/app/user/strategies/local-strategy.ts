@@ -8,4 +8,8 @@ export class LocalStrategy implements IStorage {
     public remove(key: string): void {
         localStorage.removeItem(key);
     }
+
+    public get(key: string): string | null {
+        return localStorage.getItem(key);
+    }
 }
