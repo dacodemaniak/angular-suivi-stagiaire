@@ -1,5 +1,11 @@
 import { IStorage } from "./i-storage";
 
 export class SessionStrategy implements IStorage {
-    store(): void {}
+    public store(key: string, value: string): void {
+        sessionStorage.setItem(key, value);
+    }
+
+    public remove(key: string): void {
+        sessionStorage.removeItem(key);
+    }
 }

@@ -1,3 +1,4 @@
 export interface IStorage {
-    store(): void;
+    store(key: string, value: string): void;
+    remove(key: string): void;
 }

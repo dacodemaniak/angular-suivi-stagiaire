@@ -1,5 +1,11 @@
 import { IStorage } from "./i-storage";
 
 export class LocalStrategy implements IStorage {
-    store(): void {}
+    public store(key: string, value: string): void {
+        localStorage.setItem(key, value);
+    }
+
+    public remove(key: string): void {
+        localStorage.removeItem(key);
+    }
 }
