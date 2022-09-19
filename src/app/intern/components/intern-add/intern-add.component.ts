@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './intern-add.component.html',
   styleUrls: ['./intern-add.component.scss']
 })
-export class InternAddComponent implements OnInit {
+export class InternAddComponent implements OnInit, OnDestroy {
 
   public internForm: FormGroup | null = null;
   public poes: POE[] = [];
@@ -79,9 +79,12 @@ export class InternAddComponent implements OnInit {
           ])
         });        
       })
-
   }
 
+  public ngOnDestroy(): void {
+      this.subscription.unsubscribe();
+  }
+  
   /**
    * Call service to add an Intern
    * UPDATE : some DTO have to been sent to service combining Intern and POES of the Intern
