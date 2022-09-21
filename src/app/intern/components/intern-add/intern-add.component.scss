@@ -1,1 +1,7 @@
-
+div {
+    &.form-error {
+        color: rgb(210, 12, 12);
+        font-weight: lighter;
+        font-size: 1em;
+    }
+}

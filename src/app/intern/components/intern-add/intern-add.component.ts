@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { Logger } from 'src/app/core/helpers/logger';
@@ -7,9 +7,9 @@ import { POE } from 'src/app/core/models/poe';
 import { CrudSnackbarService } from '@services/crud-snackbar.service';
 import { InternService } from '@services/intern.service';
 import { POEService } from '@services/poe.service';
-import { DateLessThan } from './../../../core/validators/date-less-than';
 import { Intern } from './../../../core/models/intern';
 import { Subscription } from 'rxjs';
+import { DateValidator } from 'src/app/core/validators/date-validator';
 @Component({
   selector: 'app-intern-add',
   templateUrl: './intern-add.component.html',
@@ -67,16 +67,13 @@ export class InternAddComponent implements OnInit, OnDestroy {
             '',
             [
               Validators.required,
-              
+              DateValidator.dateNotLessThan
             ]
           ],
           poes: [
-            ''
+            '',
+            Validators.required
           ]
-        }, {
-          validators: Validators.compose([
-            DateLessThan.dateLessThan('birthDate', {dateLessThan: true})
-          ])
         });        
       })
   }
@@ -104,5 +101,4 @@ export class InternAddComponent implements OnInit, OnDestroy {
         this.router.navigate(['/', 'interns']);
       });
   }
-
 }

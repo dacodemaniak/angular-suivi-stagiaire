@@ -39,6 +39,7 @@
           <input matInput type="date" formControlName="birthDate" placeholder="Intern birth date..." autocomplete="do-not-fill">
           <mat-error *ngIf="c['birthDate'].errors && c['birthDate'].touched || c['birthDate'].dirty">
             <span *ngIf="c['birthDate'].hasError('required')">Birthdate is required...</span>
+            <span *ngIf="c['birthDate'].hasError('dateNotLessThan')">Birthdate cannot be superior than today...</span>
           </mat-error>
         </mat-form-field>
       </div>
