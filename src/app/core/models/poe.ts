@@ -1,6 +1,5 @@
 import { Expose, plainToInstance, Type } from "class-transformer";
 import 'reflect-metadata';
-import { Logger } from "../helpers/logger";
 export class POE {
   @Expose()
   public id?: number;
