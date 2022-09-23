@@ -9,11 +9,17 @@ export abstract class Logger {
     'background: blue'
   ];
 
+  public static errorStyle: string[] = [
+    'background: red'
+  ]
+
   public static info(message: string): void {
     console.log(Logger.messageBuilder(message), Logger.styleBuilder(Logger.infoStyle));
   }
 
-  public static error(message: string): void {}
+  public static error(message: string): void {
+    console.log(Logger.messageBuilder(message), Logger.styleBuilder(Logger.errorStyle));
+  }
 
   public static warning(message: string): void {}
 
