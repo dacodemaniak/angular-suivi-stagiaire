@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { identifierName } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -51,7 +51,20 @@ export class InternService implements ICrud<Intern> {
         return intern;
       })
     )
+  }
 
+  /**
+   * Check if an email already exists in the database sending a request to our API
+   * @param email The email we want to check
+   * @returns an Observable of HttpResponse (containing status and eventually a body)
+   */
+  public emailAlreadyExists(email: string): Observable<HttpResponse<any>> {
+    return this.httpClient.get<HttpResponse<any>>(
+      `${environment.apiRoot}intern/byemail?email=${email}`,
+      {
+        observe: 'response'
+      }
+    );
   }
 
   public getItemNumber(): number {
