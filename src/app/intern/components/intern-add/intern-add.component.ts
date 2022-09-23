@@ -10,6 +10,7 @@ import { POEService } from '@services/poe.service';
 import { Intern } from './../../../core/models/intern';
 import { Subscription } from 'rxjs';
 import { DateValidator } from 'src/app/core/validators/date-validator';
+import { EmailExistsValidatorService } from 'src/app/core/validators/email-exists-validator.service';
 @Component({
   selector: 'app-intern-add',
   templateUrl: './intern-add.component.html',
@@ -26,7 +27,8 @@ export class InternAddComponent implements OnInit, OnDestroy {
     private internService: InternService,
     private poeService: POEService,
     private router: Router,
-    private crudSnackBar: CrudSnackbarService
+    private crudSnackBar: CrudSnackbarService,
+    private emailExistsValidator: EmailExistsValidatorService
   ) { }
 
   public get c(): {[key: string]: AbstractControl} {
@@ -47,7 +49,7 @@ export class InternAddComponent implements OnInit, OnDestroy {
             '', // Default value for the field control
             [
               Validators.required,
-              Validators.minLength(2)
+              Validators.minLength(2),
             ]
           ],
           firstName: [
@@ -57,8 +59,9 @@ export class InternAddComponent implements OnInit, OnDestroy {
             '',
             [
               Validators.required,
-              Validators.pattern(new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}'))
-            ]
+              Validators.pattern(new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}')),
+            ],
+            EmailExistsValidatorService.emailExists
           ],
           phoneNumber: [
             ''
