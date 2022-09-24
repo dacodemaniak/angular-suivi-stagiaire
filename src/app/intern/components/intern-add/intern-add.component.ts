@@ -11,6 +11,7 @@ import { Intern } from './../../../core/models/intern';
 import { Subscription } from 'rxjs';
 import { DateValidator } from 'src/app/core/validators/date-validator';
 import { EmailExistsValidatorService } from 'src/app/core/validators/email-exists-validator.service';
+import * as moment from 'moment';
 @Component({
   selector: 'app-intern-add',
   templateUrl: './intern-add.component.html',
@@ -53,7 +54,10 @@ export class InternAddComponent implements OnInit, OnDestroy {
             ]
           ],
           firstName: [
-            ''
+            '',
+            [
+              Validators.required
+            ]
           ],
           email: [
             '',

@@ -2,6 +2,7 @@
   <form [formGroup]="internForm" (ngSubmit)="onSubmit()">
     <fieldset title="Identité">
       <legend>Identité</legend>
+      
       <div class="form-group">
         <mat-form-field>
           <input matInput formControlName="name" placeholder="Intern name..." autocomplete="do-not-fill">
@@ -45,6 +46,7 @@
         </mat-form-field>
       </div>
     </fieldset>
+
     <fieldset title="Affectations">
       <legend>Affectations</legend>
       <div class="form-group">
@@ -56,6 +58,7 @@
         </mat-selection-list>
       </div>
     </fieldset>
+    
     <button mat-raised-button color="accent" [disabled]="internForm.invalid">Save</button>
   </form>
 </ng-container>
