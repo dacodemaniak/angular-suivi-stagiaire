@@ -35,7 +35,6 @@ export class POEService implements ICrud<POE>{
       take(1),
       map((poes: any) => {
         return poes.map((poe: any) => {
-          
           const oPoe: POE = new POE();
           return oPoe.deserialize(poe);
         })
