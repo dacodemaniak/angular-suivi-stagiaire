@@ -1,13 +1,20 @@
-import { AbstractControl } from "@angular/forms";
+import { AbstractControl, ValidationErrors } from "@angular/forms";
 import * as moment from "moment";
+import { Logger } from "../helpers/logger";
 
 export class DateValidator {
-    public static dateNotLessThan(control: AbstractControl): {[key: string]: any} | null {
-        if (control.errors !== null) {
+    public static dateNotLessThan(control: AbstractControl): ValidationErrors | null {
+
+        if (control.value.trim() === '') {
             return null;
         }
+        
         const userEnteredDate: moment.Moment = moment(control.value);
+        
         const today: moment.Moment = moment();
-        return userEnteredDate.isSameOrAfter(today) ? {dateNotLessThan: true} : null;
-      }
+        if (userEnteredDate.isSameOrAfter(today)) {
+            return {dateNotLessThan: true}
+        }
+        return null;
+    }
 }
