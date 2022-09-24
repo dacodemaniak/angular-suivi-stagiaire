@@ -1,14 +1,15 @@
 import { Expose, plainToInstance, Type } from "class-transformer";
 import 'reflect-metadata';
+import { Serializable } from "./interfaces/serializable";
 
-export class Intern {
+export class Intern implements Serializable<Intern> {
   @Expose()
   public id?: number;
 
   @Expose()
-  public name: string;
+  public name: string = '';
 
-  @Expose()
+  @Expose({name: 'firstName'})
   public firstname?: string;
 
   @Expose()
@@ -25,10 +26,10 @@ export class Intern {
   public address?: string;
 
   public constructor() {
-    this.name = '';
+    
   }
 
-  public deserialize(rawIntern: unknown): Intern {
+  public deserialize(rawIntern: any): Intern {
     return plainToInstance(Intern, rawIntern, {excludeExtraneousValues: true});
   }
 }

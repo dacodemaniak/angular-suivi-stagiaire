@@ -1,6 +1,7 @@
 import { Expose, plainToInstance, Type } from "class-transformer";
 import 'reflect-metadata';
-export class POE {
+import { Serializable } from "./interfaces/serializable";
+export class POE implements Serializable<POE> {
   @Expose()
   public id?: number;
   
