@@ -5,17 +5,20 @@ import { Observable } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { Logger } from '../helpers/logger';
 import { ICrud } from '../interfaces/i-crud';
+import { ModelFactory } from '../models/factory/model-factory';
 import { Intern } from '../models/intern';
 import { environment } from './../../../environments/environment';
+import { ManagedService } from './managed-service';
 @Injectable({
   providedIn: 'root'
 })
-export class InternService implements ICrud<Intern> {
-
+export class InternService extends ManagedService implements ICrud<Intern> {
 
   constructor(
     private httpClient: HttpClient
-  ) {}
+  ) {
+    super();
+  }
 
   findAll(): Observable<Intern[]> {
     return this.httpClient.get<any>(
@@ -24,7 +27,7 @@ export class InternService implements ICrud<Intern> {
       take(1),
       map((rawInterns: any) => {
         return rawInterns.map((rawIntern: any) => {
-          return new Intern().deserialize(rawIntern);
+          return new ModelFactory().getInstance(this.entityClassName).deserialize(rawIntern);
         })
       })
     )
@@ -37,9 +40,7 @@ export class InternService implements ICrud<Intern> {
     .pipe(
       take(1),
       map((rawIntern: any) => {
-        const intern: Intern = new Intern().deserialize(rawIntern);
-
-        return intern;
+        return new ModelFactory().getInstance(this.entityClassName).deserialize(rawIntern);
       })
     )
   }
@@ -76,7 +77,7 @@ export class InternService implements ICrud<Intern> {
     .pipe(
       take(1),
       map((rawIntern: unknown) => {
-        return new Intern().deserialize(rawIntern);
+        return new ModelFactory().getInstance(this.entityClassName).deserialize(rawIntern);
       })
     )
   }
