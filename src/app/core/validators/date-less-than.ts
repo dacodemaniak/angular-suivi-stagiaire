@@ -8,9 +8,15 @@ export class DateLessThan {
         validationErrors: ValidationErrors
     ): ValidatorFn {
         return (form: AbstractControl): ValidationErrors | null => {
-            
+
+
+
             const dateFieldControl: AbstractControl | null = form.get('birthDate');
-            
+
+            if (dateFieldControl!.value && dateFieldControl!.value.toString().trim() === '') {
+              return null;
+            }
+
             if (dateFieldControl && dateFieldControl.errors !== null) {
                 return null; // Already in error, so, let's continue
             }

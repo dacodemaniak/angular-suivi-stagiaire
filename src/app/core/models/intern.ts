@@ -1,4 +1,5 @@
 import { Expose, plainToInstance, Type } from "class-transformer";
+import * as moment from "moment";
 import 'reflect-metadata';
 
 export class Intern {
@@ -26,6 +27,14 @@ export class Intern {
 
   public constructor() {
     this.name = '';
+  }
+
+  public getBirthDateAsString(): string {
+    return this.birthDate ? moment(this.birthDate).format('YYYY-MM-DD') : '';
+  }
+
+  public getBirthDate(): Date | string {
+    return this.birthDate ? this.birthDate : '';
   }
 
   public deserialize(rawIntern: unknown): Intern {

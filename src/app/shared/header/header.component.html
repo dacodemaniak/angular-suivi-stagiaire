@@ -1,12 +1,19 @@
 <mat-toolbar color="primary">
+
+  <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>Item 1</button>
+    <button mat-menu-item>Item 2</button>
+  </mat-menu>
+
   <span>{{ title }}</span>
   <span class="--spacer"></span>
-  
+
   <!-- Commentaire en HTML -->
   <a [routerLink]="['/signin']" *ngIf="userService.isAuthenticated() === false">
     <mat-icon>person</mat-icon>
   </a>
-  
+
   <a *ngIf="userService.isAuthenticated() === true" (click)="userService.signout()">
     <mat-icon>
       no_accounts

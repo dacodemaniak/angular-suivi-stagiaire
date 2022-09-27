@@ -5,9 +5,9 @@
       <div class="form-group">
         <mat-form-field>
           <input matInput formControlName="name" placeholder="Intern name..." autocomplete="do-not-fill">
-          <mat-error *ngIf="c['name'].errors && c['name'].touched || c['name'].dirty">
+          <mat-error *ngIf="internForm.controls['name'].errors && c['name'].touched || c['name'].dirty">
             <span *ngIf="c['name'].hasError('required')">Name is required...</span>
-            <span *ngIf="c['name'].hasError('minlength')">Name must have at least 2 chars</span>
+            <span *ngIf="name!.hasError('minlength')">Name must have at least 2 chars</span>
           </mat-error>
         </mat-form-field>
       </div>
@@ -43,7 +43,8 @@
         </mat-form-field>
       </div>
     </fieldset>
-    <fieldset title="Affectations">
+
+    <fieldset title="Affectations" *ngIf="c['poes']">
       <legend>Affectations</legend>
       <div class="form-group">
         <p>Affecter aux POE</p>
