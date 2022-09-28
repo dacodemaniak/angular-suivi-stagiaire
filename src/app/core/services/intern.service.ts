@@ -82,6 +82,19 @@ export class InternService extends ManagedService implements ICrud<Intern> {
     )
   }
 
+  public addWithPoes(internData: unknown): Observable<Intern> {
+    return this.httpClient.post<any>(
+      `${environment.apiRoot}internandpoes`,
+      internData
+    )
+    .pipe(
+      take(1),
+      map((rawIntern: unknown) => {
+        return new ModelFactory().getInstance(this.entityClassName).deserialize(rawIntern);
+      })
+    )    
+  }
+  
   public update(intern: Intern): void {}
 
   public getNextId(): number {

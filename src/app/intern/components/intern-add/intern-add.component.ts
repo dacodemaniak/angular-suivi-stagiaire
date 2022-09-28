@@ -97,7 +97,7 @@ export class InternAddComponent implements OnInit, OnDestroy {
     console.log(`Bout to send : ${JSON.stringify(this.internForm!.value)}`);
 
     // We'll have to pass brand new intern to the add method of our service
-    this.subscription = this.internService.add(this.internForm!.value)
+    this.subscription = this.internService.addWithPoes(this.internForm!.value)
       .subscribe((intern: Intern) => {
         Logger.info(`An intern was created : ${JSON.stringify(intern)}`);
         // Load a snack
