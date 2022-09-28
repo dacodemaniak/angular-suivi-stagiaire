@@ -44,6 +44,17 @@ export class InternAddComponent implements OnInit, OnDestroy {
     const myInternForm: InternFormBuilder = new InternFormBuilder(this.formBuilder, this.poeService);
     this.internForm = myInternForm.internForm;
 
+    const intern: Intern = new Intern();
+    intern.id = 99;
+    intern.name = 'Aubert';
+    intern.firstname = 'Jean-Luc';
+    intern.birthDate = new Date(1968, 3, 30);
+    intern.email = 'jla.webprojet@gmail.com';
+    intern.phoneNumber = '06 89 74 56 23';
+    intern.address = 'Toulouse';
+
+    myInternForm.setIntern(intern);
+
     // J'voudrais bien aussi les poes
     myInternForm.toggleAddPoes()
       .subscribe(

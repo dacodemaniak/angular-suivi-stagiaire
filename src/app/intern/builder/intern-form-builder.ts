@@ -1,5 +1,6 @@
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { POEService } from "@services/poe.service";
+import { classToPlain, instanceToPlain } from "class-transformer";
 import * as moment from "moment";
 import { map, Observable, take } from "rxjs";
 import { Intern } from "src/app/core/models/intern";
@@ -17,16 +18,23 @@ export class InternFormBuilder {
     private formBuilder: FormBuilder,
     private poeService: POEService
   ) {
-
-
-    this.intern.name = 'Andreotti';
-    this.intern.firstname = 'Pia';
-    this.intern.email = 'bli@bla.com';
-    this.intern.phoneNumber = '07 23 56 89 87';
-    this.intern.birthDate = new Date('1989-01-01');
-
     this._buildForm();
   } // Agrégation
+
+  public setIntern(intern: Intern) {
+    this.intern = intern;
+    const plainIntern: any = instanceToPlain(this.intern);
+    for (const field in this.form!.controls) {
+      if (field === 'firstName') {
+        this.form?.get(field)?.setValue(plainIntern.firstname);
+      } else if (field === 'birthDate') {
+        this.form?.get(field)?.setValue(moment(plainIntern[field]).format('YYYY-MM-DD'));
+      } else {
+        this.form?.get(field)?.setValue(plainIntern[field]);
+      }
+
+    }
+  }
 
   public get internForm(): FormGroup {
     return this.form!;
