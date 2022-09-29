@@ -6,13 +6,19 @@ import { InternDetailComponent } from './components/intern-detail/intern-detail.
 import { InternTableComponent } from './components/intern-table/intern-table.component';
 import { InternAddComponent } from './components/intern-add/intern-add.component';
 import { SharedModule } from '../shared/shared.module';
+import { InternToolbarComponent } from './components/intern-toolbar/intern-toolbar.component';
+import { PoesListComponent } from './components/intern-toolbar/poes-list/poes-list.component';
+import { NameOrEmailSearchComponent } from './components/intern-toolbar/name-or-email-search/name-or-email-search.component';
 
 
 @NgModule({
   declarations: [
     InternDetailComponent,
     InternTableComponent,
-    InternAddComponent
+    InternAddComponent,
+    InternToolbarComponent,
+    PoesListComponent,
+    NameOrEmailSearchComponent
   ],
   imports: [
     CommonModule,
