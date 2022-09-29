@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { InternService } from './../../../core/services/intern.service';
 import { Logger } from './../../../core/helpers/logger';
 import { Intern } from './../../../core/models/intern';
+import { POE } from 'src/app/core/models/poe';
 
 @Component({
   selector: 'app-intern-table',
@@ -24,7 +25,7 @@ export class InternTableComponent implements OnInit {
     verticalAlign: 'middle',
     textAlign: 'center'
   }
-  
+
   constructor(
     public internService: InternService // Dependency Injection (D de SOLID)
   ) {
@@ -48,6 +49,10 @@ export class InternTableComponent implements OnInit {
     );
     InternTableComponent.sortOrder = InternTableComponent.sortOrder * -1;
     console.log(`After sort, sortOrder is : ${InternTableComponent.sortOrder}`);
+  }
+
+  public receivePOE(poe: POE): void {
+    Logger.info(`Grand father receive ${JSON.stringify(poe)}`);
   }
 
   private static sortName(intern1: Intern, intern2: Intern): number {

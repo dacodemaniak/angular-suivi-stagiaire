@@ -1,1 +1,3 @@
-<p>poes-list works!</p>
+<div *ngFor="let poe of poes" (click)="selectedPOE(poe)">
+  {{ poe.name }}
+</div>

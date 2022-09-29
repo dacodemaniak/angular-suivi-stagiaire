@@ -14,6 +14,10 @@ export class InternFormBuilder {
   private _poes: POE[] | null = null;
   private intern: Intern = new Intern(); // The intern we want to manage (empty Model first)
 
+  private excludeSomeFields: string[] = [
+    'phoneNumber'
+  ];
+
   public constructor(
     private formBuilder: FormBuilder,
     private poeService: POEService
@@ -36,6 +40,11 @@ export class InternFormBuilder {
     }
   }
 
+  public exclude(): void {
+    this.excludeSomeFields.forEach((controlFieldName: string) => {
+      this.form?.removeControl(controlFieldName);
+    })
+  }
   public get internForm(): FormGroup {
     return this.form!;
   }
