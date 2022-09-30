@@ -4,6 +4,7 @@ import 'reflect-metadata';
 import { Serializable } from "./interfaces/serializable";
 
 export class Intern {
+
   @Expose()
   public id?: number;
 
@@ -25,4 +26,8 @@ export class Intern {
 
   @Expose()
   public address?: string;
+
+  getBirthDateAsString(): string {
+    return this.birthDate !== null ? moment(this.birthDate).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+  }
 }
