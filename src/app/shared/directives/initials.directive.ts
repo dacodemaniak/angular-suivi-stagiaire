@@ -39,8 +39,14 @@ export class InitialsDirective implements OnInit {
     for (const property in this.config) {
       this.renderer.setStyle(this.nativeElement, property, this.config[property]);
     }
+    // FIX : show only name initial if not firstname
+    let initials: string;
+    if (this.intern?.firstname !== '') {
+      initials = this.intern!.firstname!.charAt(0) + this.intern!.name!.charAt(0);
+    } else {
+      initials = this.intern!.name!.charAt(0);
+    }
 
-    const initials: string = this.intern!.firstname!.charAt(0) + this.intern!.name!.charAt(0);
 
     this.nativeElement.innerText = initials;
   }
