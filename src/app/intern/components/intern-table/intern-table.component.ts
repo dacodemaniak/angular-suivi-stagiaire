@@ -3,6 +3,7 @@ import { InternService } from './../../../core/services/intern.service';
 import { Logger } from './../../../core/helpers/logger';
 import { Intern } from './../../../core/models/intern';
 import { POE } from 'src/app/core/models/poe';
+import { ToolbarServiceService } from '../../services/toolbar-service.service';
 
 @Component({
   selector: 'app-intern-table',
@@ -26,8 +27,11 @@ export class InternTableComponent implements OnInit {
     textAlign: 'center'
   }
 
+  private selectedPOE: POE | null = null;
+
   constructor(
-    public internService: InternService // Dependency Injection (D de SOLID)
+    public internService: InternService, // Dependency Injection (D de SOLID)
+    private toolbarService: ToolbarServiceService
   ) {
   }
 
@@ -35,7 +39,12 @@ export class InternTableComponent implements OnInit {
     this.internService.findAll()
       .subscribe((interns: Intern[]) => {
         this.interns = interns;
-      })
+      });
+
+    this.toolbarService.getPOE()
+      .subscribe((poe: POE) => {
+        Logger.info(`User selected ${JSON.stringify(poe)}`);
+      });
   }
 
   public onDelete(intern: Intern): void {
