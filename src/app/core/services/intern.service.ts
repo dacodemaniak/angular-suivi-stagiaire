@@ -1,21 +1,24 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { identifierName } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { Logger } from '../helpers/logger';
 import { ICrud } from '../interfaces/i-crud';
+import { ModelFactory } from '../models/factory/model-factory';
 import { Intern } from '../models/intern';
 import { environment } from './../../../environments/environment';
+import { ManagedService } from './managed-service';
 @Injectable({
   providedIn: 'root'
 })
-export class InternService implements ICrud<Intern> {
-
+export class InternService extends ManagedService implements ICrud<Intern> {
 
   constructor(
     private httpClient: HttpClient
-  ) {}
+  ) {
+    super();
+  }
 
   findAll(): Observable<Intern[]> {
     return this.httpClient.get<any>(
@@ -24,16 +27,7 @@ export class InternService implements ICrud<Intern> {
       take(1),
       map((rawInterns: any) => {
         return rawInterns.map((rawIntern: any) => {
-          const intern: Intern = new Intern();
-          intern.id = rawIntern.id;
-          intern.name = rawIntern.name;
-          intern.firstname = rawIntern.firstName;
-          intern.address = rawIntern.address;
-          intern.email = rawIntern.email;
-          intern.phoneNumber = rawIntern.phoneNumber;
-          intern.birthDate = new Date(rawIntern.birthDate);
-
-          return intern;
+          return new ModelFactory().getInstance(this.entityClassName).deserialize(rawIntern);
         })
       })
     )
@@ -46,12 +40,23 @@ export class InternService implements ICrud<Intern> {
     .pipe(
       take(1),
       map((rawIntern: any) => {
-        const intern: Intern = new Intern().deserialize(rawIntern);
-
-        return intern;
+        return new ModelFactory().getInstance(this.entityClassName).deserialize(rawIntern);
       })
     )
+  }
 
+  /**
+   * Check if an email already exists in the database sending a request to our API
+   * @param email The email we want to check
+   * @returns an Observable of HttpResponse (containing status and eventually a body)
+   */
+  public emailAlreadyExists(email: string): Observable<HttpResponse<any>> {
+    return this.httpClient.get<HttpResponse<any>>(
+      `${environment.apiRoot}intern/byemail?email=${email}`,
+      {
+        observe: 'response'
+      }
+    );
   }
 
   public getItemNumber(): number {
@@ -72,11 +77,24 @@ export class InternService implements ICrud<Intern> {
     .pipe(
       take(1),
       map((rawIntern: unknown) => {
-        return new Intern().deserialize(rawIntern);
+        return new ModelFactory().getInstance(this.entityClassName).deserialize(rawIntern);
       })
     )
   }
 
+  public addWithPoes(internData: unknown): Observable<Intern> {
+    return this.httpClient.post<any>(
+      `${environment.apiRoot}internandpoes`,
+      internData
+    )
+    .pipe(
+      take(1),
+      map((rawIntern: unknown) => {
+        return new ModelFactory().getInstance(this.entityClassName).deserialize(rawIntern);
+      })
+    )    
+  }
+  
   public update(intern: Intern): void {}
 
   public getNextId(): number {

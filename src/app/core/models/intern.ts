@@ -1,15 +1,16 @@
 import { Expose, plainToInstance, Type } from "class-transformer";
 import * as moment from "moment";
 import 'reflect-metadata';
+import { Serializable } from "./interfaces/serializable";
 
 export class Intern {
   @Expose()
   public id?: number;
 
   @Expose()
-  public name: string;
+  public name: string = '';
 
-  @Expose()
+  @Expose({name: 'firstName'})
   public firstname?: string;
 
   @Expose()
@@ -24,20 +25,4 @@ export class Intern {
 
   @Expose()
   public address?: string;
-
-  public constructor() {
-    this.name = '';
-  }
-
-  public getBirthDateAsString(): string {
-    return this.birthDate ? moment(this.birthDate).format('YYYY-MM-DD') : '';
-  }
-
-  public getBirthDate(): Date | string {
-    return this.birthDate ? this.birthDate : '';
-  }
-
-  public deserialize(rawIntern: unknown): Intern {
-    return plainToInstance(Intern, rawIntern, {excludeExtraneousValues: true});
-  }
 }

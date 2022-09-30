@@ -2,6 +2,7 @@
   <form [formGroup]="internForm" (ngSubmit)="onSubmit()">
     <fieldset title="Identité">
       <legend>Identité</legend>
+
       <div class="form-group">
         <mat-form-field>
           <input matInput formControlName="name" placeholder="Intern name..." autocomplete="do-not-fill">
@@ -24,6 +25,7 @@
           <mat-error *ngIf="c['email'].errors && c['email'].touched || c['email'].dirty">
             <span *ngIf="c['email'].hasError('required')">Email is required...</span>
             <span *ngIf="c['email'].hasError('pattern')">Not an email pattern...</span>
+            <span *ngIf="c['email'].hasError('alreadyExists')">Cannot use this already taken email !</span>
           </mat-error>
         </mat-form-field>
       </div>
@@ -39,6 +41,7 @@
           <input matInput type="date" formControlName="birthDate" placeholder="Intern birth date..." autocomplete="do-not-fill">
           <mat-error *ngIf="c['birthDate'].errors && c['birthDate'].touched || c['birthDate'].dirty">
             <span *ngIf="c['birthDate'].hasError('required')">Birthdate is required...</span>
+            <span *ngIf="c['birthDate'].hasError('dateNotLessThan')">Birthdate cannot be superior than today...</span>
           </mat-error>
         </mat-form-field>
       </div>
@@ -54,10 +57,8 @@
           </mat-list-option>
         </mat-selection-list>
       </div>
-      <div class="form-error" *ngIf="internForm.hasError('dateLessThan')">
-        <span>Birth date cannot be after today...</span>
-      </div>
     </fieldset>
+
     <button mat-raised-button color="accent" [disabled]="internForm.invalid">Save</button>
   </form>
 </ng-container>

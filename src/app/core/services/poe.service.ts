@@ -4,17 +4,20 @@ import { map, Observable, of, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Logger } from '../helpers/logger';
 import { ICrud } from '../interfaces/i-crud';
+import { ModelFactory } from '../models/factory/model-factory';
 import { POE } from '../models/poe';
+import { ManagedService } from './managed-service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class POEService implements ICrud<POE>{
-
+export class POEService extends ManagedService implements ICrud<POE>{
 
   constructor(
     private httpClient: HttpClient
-  ) {}
+  ) {
+    super();
+  }
 
   add(item: POE): void {
 
@@ -35,11 +38,7 @@ export class POEService implements ICrud<POE>{
       take(1),
       map((poes: any) => {
         return poes.map((poe: any) => {
-          
-          const asClass: POE = new POE().deserialize(poe);
-
-          Logger.info(`Deserialized POE ${JSON.stringify(asClass)}`);
-          return asClass;
+          return new ModelFactory().getInstance(this.entityClassName).deserialize(poe);
         })
       })
     )

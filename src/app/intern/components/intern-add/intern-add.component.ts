@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { Logger } from 'src/app/core/helpers/logger';
@@ -10,6 +10,9 @@ import { Intern } from './../../../core/models/intern';
 import { Subscription } from 'rxjs';
 import { InternFormBuilder } from '../../builder/intern-form-builder';
 import { POEService } from '@services/poe.service';
+import { DateValidator } from 'src/app/core/validators/date-validator';
+import { EmailExistsValidatorService } from 'src/app/core/validators/email-exists-validator.service';
+import * as moment from 'moment';
 @Component({
   selector: 'app-intern-add',
   templateUrl: './intern-add.component.html',
@@ -26,8 +29,9 @@ export class InternAddComponent implements OnInit, OnDestroy {
     private internService: InternService,
     private poeService: POEService,
     private router: Router,
-    private crudSnackBar: CrudSnackbarService
-  ) {}
+    private crudSnackBar: CrudSnackbarService,
+    private emailExistsValidator: EmailExistsValidatorService
+  ) { }
 
   public get c(): {[key: string]: AbstractControl} {
     return this.internForm!.controls;
@@ -44,24 +48,6 @@ export class InternAddComponent implements OnInit, OnDestroy {
     const myInternForm: InternFormBuilder = new InternFormBuilder(this.formBuilder, this.poeService);
     this.internForm = myInternForm.internForm;
 
-    const intern: Intern = new Intern();
-    intern.id = 99;
-    intern.name = 'Aubert';
-    intern.firstname = 'Jean-Luc';
-    intern.birthDate = new Date(1968, 3, 30);
-    intern.email = 'jla.webprojet@gmail.com';
-    intern.phoneNumber = '06 89 74 56 23';
-    intern.address = 'Toulouse';
-
-    myInternForm.setIntern(intern);
-
-    // J'voudrais bien aussi les poes
-    myInternForm.toggleAddPoes()
-      .subscribe(
-        (poes: POE[]) => {
-          this.poes = poes;
-        }
-      );
   }
 
   public ngOnDestroy(): void {
@@ -76,7 +62,7 @@ export class InternAddComponent implements OnInit, OnDestroy {
     console.log(`Bout to send : ${JSON.stringify(this.internForm!.value)}`);
 
     // We'll have to pass brand new intern to the add method of our service
-    this.subscription = this.internService.add(this.internForm!.value)
+    this.subscription = this.internService.addWithPoes(this.internForm!.value)
       .subscribe((intern: Intern) => {
         Logger.info(`An intern was created : ${JSON.stringify(intern)}`);
         // Load a snack
@@ -87,5 +73,4 @@ export class InternAddComponent implements OnInit, OnDestroy {
         this.router.navigate(['/', 'interns']);
       });
   }
-
 }

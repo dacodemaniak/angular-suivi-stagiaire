@@ -1,6 +1,6 @@
 import { Expose, plainToInstance, Type } from "class-transformer";
 import 'reflect-metadata';
-import { Logger } from "../helpers/logger";
+import { Serializable } from "./interfaces/serializable";
 export class POE {
   @Expose()
   public id?: number;
@@ -15,10 +15,5 @@ export class POE {
   @Expose()
   @Type(() => Date)
   public  endDate?: Date;
-
-  public deserialize(plainPOE: any): POE {
-    const asClass: POE =  plainToInstance(POE, plainPOE, {excludeExtraneousValues: true});
-    return asClass;
-  }
 
 }
