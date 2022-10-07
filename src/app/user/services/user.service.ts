@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { take } from 'rxjs';
+import { environment } from '@environment/environment';
+import { Observable, take, tap } from 'rxjs';
 import { Logger } from 'src/app/core/helpers/logger';
 import { StorageStrategyFactory } from 'src/app/core/helpers/storage-strategy-factory';
 import { UserModel } from '../models/user-model';
@@ -38,25 +39,26 @@ export class UserService {
    * 
    * @param credentials From signinForm (login and password user entered)
    * credentials => {login: 'bond', pass:'007'} <= this.signinForm.value
+   * Je dois passer {userName: ?, userPass: ?}
    */
-  public signin(credentials: any): void {
+  public signin(credentials: any): Observable<any> {
+    const payload: any = {
+      userName: credentials.login,
+      userPass: credentials.pass
+    };
 
-    this.httpClient.get<any>(
-      `http://localhost:3000/users?login=${credentials.login}&pass=${credentials.pass}`
+    return this.httpClient.post<any>(
+      `${environment.apiRoot}user/signin`,
+      payload
     )
     .pipe(
-      take(1)
-    )
-    .subscribe((anyUsers: any) => {
-      if (anyUsers.length) {
-        // Got a user...
-        this.user = new UserModel();
-        this.user.setLogin(anyUsers[0].login);
-        this.user.setToken(anyUsers[0].token);
-
-        this.storage.store(this.STORAGE_KEY, JSON.stringify(this.user));
-      }
-    });
+     tap((response) => {
+      this.user = new UserModel();
+      this.user.setLogin(credentials.login);
+      this.user.setToken(response.token);
+      this.storage.store(this.STORAGE_KEY, JSON.stringify(this.user));
+     }) 
+    );
   }
 
   public signout(): void {
@@ -78,6 +80,10 @@ export class UserService {
     }
 
     return true;
+  }
+
+  public getUser(): UserModel | null {
+    return this.user;
   }
 
   public getToken(): void {

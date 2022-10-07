@@ -9,6 +9,8 @@ import { InternModule } from './intern/intern.module';
 import { POEModule } from './poe/poe.module';
 import { UserModule } from './user/user.module';
 import { appInit } from './core/services/app-init.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtInterceptorService } from '@services/jwt-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { appInit } from './core/services/app-init.service';
     UserModule
   ],
   providers: [
-    appInit
+    appInit,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true },
   ],
   bootstrap: [AppComponent]
 })

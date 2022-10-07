@@ -39,15 +39,21 @@ export class UserSigninComponent implements OnInit {
     /**
      * this.signinForm.value => {"login": "bond", "pass": "007"}
      */
-    this.userService.signin(this.signinForm.value); // Trigger the signin process
-
-    if (this.userService.isAuthenticated()) {
-      this.router.navigate(['/', 'interns']);
-    } else {
-      this.signinForm.reset();
-      this.hasError = true;
-      setTimeout(() => this.hasError = false, 2500);
-    }
+    this.userService.signin(this.signinForm.value)
+    .subscribe({
+      next: (response: any) => {
+        // Your stuff here if 200
+        this.router.navigate(['/', 'interns']);
+        Logger.info(`User was found`)
+      },
+      error: (error: any) => {
+        // Your stuff here if not 200
+        this.signinForm.reset();
+        this.hasError = true;
+        setTimeout(() => this.hasError = false, 2500);
+        Logger.info(`User was not found`);
+      }
+    }); // Trigger the signin process
   }
 
   public close(): void {
