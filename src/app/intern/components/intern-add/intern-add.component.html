@@ -2,13 +2,13 @@
   <form [formGroup]="internForm" (ngSubmit)="onSubmit()">
     <fieldset title="Identité">
       <legend>Identité</legend>
-      
+
       <div class="form-group">
         <mat-form-field>
           <input matInput formControlName="name" placeholder="Intern name..." autocomplete="do-not-fill">
-          <mat-error *ngIf="c['name'].errors && c['name'].touched || c['name'].dirty">
+          <mat-error *ngIf="internForm.controls['name'].errors && c['name'].touched || c['name'].dirty">
             <span *ngIf="c['name'].hasError('required')">Name is required...</span>
-            <span *ngIf="c['name'].hasError('minlength')">Name must have at least 2 chars</span>
+            <span *ngIf="name!.hasError('minlength')">Name must have at least 2 chars</span>
           </mat-error>
         </mat-form-field>
       </div>
@@ -47,7 +47,7 @@
       </div>
     </fieldset>
 
-    <fieldset title="Affectations">
+    <fieldset title="Affectations" *ngIf="c['poes']">
       <legend>Affectations</legend>
       <div class="form-group">
         <p>Affecter aux POE</p>
@@ -58,7 +58,7 @@
         </mat-selection-list>
       </div>
     </fieldset>
-    
+
     <button mat-raised-button color="accent" [disabled]="internForm.invalid">Save</button>
   </form>
 </ng-container>

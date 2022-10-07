@@ -6,9 +6,10 @@ import { Logger } from 'src/app/core/helpers/logger';
 import { POE } from 'src/app/core/models/poe';
 import { CrudSnackbarService } from '@services/crud-snackbar.service';
 import { InternService } from '@services/intern.service';
-import { POEService } from '@services/poe.service';
 import { Intern } from './../../../core/models/intern';
 import { Subscription } from 'rxjs';
+import { InternFormBuilder } from '../../builder/intern-form-builder';
+import { POEService } from '@services/poe.service';
 import { DateValidator } from 'src/app/core/validators/date-validator';
 import { EmailExistsValidatorService } from 'src/app/core/validators/email-exists-validator.service';
 import * as moment from 'moment';
@@ -20,11 +21,11 @@ import * as moment from 'moment';
 export class InternAddComponent implements OnInit, OnDestroy {
 
   public internForm: FormGroup | null = null;
-  public poes: POE[] = [];
+  public poes: POE[] | null = [];
   private subscription!: Subscription;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: FormBuilder, // DI
     private internService: InternService,
     private poeService: POEService,
     private router: Router,
@@ -33,62 +34,26 @@ export class InternAddComponent implements OnInit, OnDestroy {
   ) { }
 
   public get c(): {[key: string]: AbstractControl} {
-    return this.internForm!.controls
+    return this.internForm!.controls;
+  }
+
+  public get name(): AbstractControl | undefined {
+    return this.internForm?.controls['name'];
   }
 
   ngOnInit(): void {
-    this.poeService.findAll()
-      .pipe(
-        take(1)
-      )
-      .subscribe((poes: POE[]) => {
-        Logger.info(`Got ${poes.length} poes`);
-        this.poes = poes;
+    /**
+     * Try to instanciate my InternFormBuilder
+     */
+    const myInternForm: InternFormBuilder = new InternFormBuilder(this.formBuilder, this.poeService);
+    this.internForm = myInternForm.internForm;
 
-        this.internForm = this.formBuilder.group({
-          name: [
-            '', // Default value for the field control
-            [
-              Validators.required,
-              Validators.minLength(2),
-            ]
-          ],
-          firstName: [
-            '',
-            [
-              Validators.required
-            ]
-          ],
-          email: [
-            '',
-            [
-              Validators.required,
-              Validators.pattern(new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}')),
-            ],
-            EmailExistsValidatorService.emailExists
-          ],
-          phoneNumber: [
-            ''
-          ],
-          birthDate: [
-            '',
-            [
-              Validators.required,
-              DateValidator.dateNotLessThan
-            ]
-          ],
-          poes: [
-            '',
-            Validators.required
-          ]
-        });        
-      })
   }
 
   public ngOnDestroy(): void {
       this.subscription.unsubscribe();
   }
-  
+
   /**
    * Call service to add an Intern
    * UPDATE : some DTO have to been sent to service combining Intern and POES of the Intern
@@ -103,7 +68,7 @@ export class InternAddComponent implements OnInit, OnDestroy {
         // Load a snack
         this.crudSnackBar.config(`Intern was successfully added`, `Got It`);
         this.crudSnackBar.open();
-    
+
         // Finally go to the intern table component
         this.router.navigate(['/', 'interns']);
       });

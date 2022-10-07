@@ -1,4 +1,5 @@
 import { Expose, plainToInstance, Type } from "class-transformer";
+import * as moment from "moment";
 import 'reflect-metadata';
 import { Serializable } from "./interfaces/serializable";
 
