@@ -1,4 +1,5 @@
 import * as moment from 'moment';
+import { environment } from '@environment/environment';
 
 export abstract class Logger {
   public static globalStyle: string [] = [
@@ -14,7 +15,8 @@ export abstract class Logger {
   ]
 
   public static info(message: string): void {
-    console.log(Logger.messageBuilder(message), Logger.styleBuilder(Logger.infoStyle));
+    if (environment.production === false)
+      console.log(Logger.messageBuilder(message), Logger.styleBuilder(Logger.infoStyle));
   }
 
   public static error(message: string): void {
