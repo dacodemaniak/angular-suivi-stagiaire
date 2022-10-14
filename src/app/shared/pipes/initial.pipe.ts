@@ -8,19 +8,17 @@ export class InitialPipe implements PipeTransform {
 
   transform(value: Intern, ...args: unknown[]): string {
     return (this.getFirstLetterOf(value.firstname!) + this.getFirstLetterOf(value.name!)).toUpperCase();
-
-    return (this.getInitials(value.firstname!) + this.getInitials(value.name!)).toUpperCase();
   }
 
   private getFirstLetterOf(value: string): string {
-    return value.charAt(0);
+    return value && value !== '' ? value.charAt(0) : '';
   }
 
   /**
    * @deprecated Prefer use getFirstLetterOf(string): string
    * @see getFirstLetterOf()
    * @param value
-   * @returns 
+   * @returns
    */
   private getInitialFirstname(value: Intern): string {
     return value.firstname!.charAt(0);
@@ -46,7 +44,7 @@ export class InitialPipe implements PipeTransform {
 
     let lastInitial: string = ''; // Get ''
 
-    
+
     const matches: string[] | null = value.match(regex); // matches => [' ']
     if (matches !== null) {
       const sepChar: string = matches[0]; // ' '
@@ -59,5 +57,5 @@ export class InitialPipe implements PipeTransform {
     }
     return firstInitial + lastInitial;
   }
-   
+
 }
